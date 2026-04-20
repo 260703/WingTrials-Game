@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Custom Maps - Flappy Bird Remastered</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#259df4",
+                        "accent-green": "#4ade80",
+                        "accent-orange": "#fb923c",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0d161c",
+                        "card-dark": "rgba(30, 41, 59, 0.7)",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(13, 22, 28, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(37, 157, 244, 0.3);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-cover bg-center overflow-x-hidden" data-alt="Dark stylized night sky with distant city lights" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC48pLiWuSuZnGlcQ0-4E0nKVvyjAGxbXKj2oa3mf3ZTQzs0kDWeUtEYXDfOykwO9OTdYa04zIdaczHYlbK_FvqRMT3048KhDuotrzCUVfKWaMkAL1S8zcTNZwoAYdV2VsSZnFjEsrpVK-7fxtu_oMD9qyw-BzjZURL2pQBtc7YXR5lQ6Y9DK_iVdAU6GspmKNRb2tnCaATpXt-9J6p7nxwRhw9LYelZxS_F1ahT7yLD8Er3Zz98tFL9g2QXtfnltjbrS-_-aQ1FHog');">
+<!-- Dark Overlay -->
+<div class="absolute inset-0 bg-background-dark/80 backdrop-blur-sm"></div>
+<div class="relative layout-container flex h-full grow flex-col max-w-[1200px] mx-auto w-full px-4 sm:px-10 py-6">
+<!-- Header Section -->
+<header class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-4">
+<button class="flex size-12 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-all border border-white/10">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div>
+<h1 class="text-3xl font-extrabold tracking-tight text-white">Custom Maps</h1>
+<p class="text-slate-400 text-sm">Remastered Edition</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 bg-primary/20 border border-primary/30 text-primary px-5 py-2.5 rounded-full font-bold hover:bg-primary/30 transition-all">
+<span class="material-symbols-outlined text-[20px]">search</span>
+<span>Search</span>
+</button>
+<div class="size-12 rounded-full border-2 border-primary p-0.5">
+<img alt="Profile" class="rounded-full w-full h-full object-cover" data-alt="User avatar profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAghd0IEitAgoSYQOlUuvE1CS-dy1mUTASuo6nln-NhdLQqySgMkBj64gRidhAEAAcDQRb0ysahytg5S4oaYkTziuSJSXxDG1MgJP1ijEmtMuUNrfUbvwe8nT1snR4LkEUf2a3kENbjmeq4F1GQJIyTiJIoFaZlUgOEl6-nt23ZR7BXu0fKXVgZ4bYWx7eayrHqHnuZ5oqtHgjqh1hSWbV1W05X08rB0q82ecYtPR0pYiSy3RHQ9AvcoNiWzDRsQse79MgmtDpp4nA8"/>
+</div>
+</div>
+</header>
+<!-- Navigation and Action Bar -->
+<div class="flex flex-col md:flex-row gap-6 items-center justify-between mb-8">
+<div class="flex p-1.5 bg-white/5 border border-white/10 rounded-full w-full md:w-auto min-w-[320px]">
+<label class="flex-1 cursor-pointer">
+<input checked="" class="hidden peer" name="map-type" type="radio"/>
+<div class="flex items-center justify-center h-11 rounded-full text-slate-400 peer-checked:bg-primary peer-checked:text-white font-bold transition-all">
+                            Local Maps
+                        </div>
+</label>
+<label class="flex-1 cursor-pointer">
+<input class="hidden peer" name="map-type" type="radio"/>
+<div class="flex items-center justify-center h-11 rounded-full text-slate-400 peer-checked:bg-primary peer-checked:text-white font-bold transition-all">
+                            Global Maps
+                        </div>
+</label>
+</div>
+<button class="w-full md:w-auto flex items-center justify-center gap-3 bg-accent-green hover:bg-green-500 text-background-dark font-black px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(74,222,128,0.3)] transition-transform hover:scale-[1.02] active:scale-95">
+<span class="material-symbols-outlined font-bold">add_circle</span>
+<span>CREATE NEW MAP</span>
+</button>
+</div>
+<!-- Content Area (Grid) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 custom-scrollbar overflow-y-auto pb-10">
+<!-- Map Card 1 -->
+<div class="glass-panel group rounded-2xl overflow-hidden hover:border-primary/50 transition-all flex flex-col">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-110" data-alt="Cyberpunk neon city at night" data-location="Neon Tokyo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4xkGte4fumNEUGiBR8DXczYKfCKZgXQ_3W5tGvew5-SussCWy72G7IU_Xf7rP3cTK3wtfTuK3cOHu6LB8TvfDyrS1H6KEqIrW-Tmq98cadbj4pXDgns5u7J6slWB_besJpTT7oZ5KbH2tvycTpRDVtfuQnS7CiDS7xMEEklmvRwbGbCPC_FzUoIvCGsI3D-ss6o0o8G61EosdrbWyhWxHoUyuBj359IGn83pZJOpY0XnBo5njWulrbqymVqZG1-zkIB5F7nZu9sJL"/>
+<div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+<span class="text-xs font-bold text-accent-green uppercase">Hard</span>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<h3 class="text-lg font-bold text-white mb-1">Neon Jungle</h3>
+<p class="text-slate-400 text-sm mb-4">by PixelMage</p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex items-center gap-1 text-slate-500 text-xs">
+<span class="material-symbols-outlined text-sm">download</span>
+<span>1.2k</span>
+</div>
+<button class="bg-primary px-4 py-2 rounded-lg text-sm font-bold text-white hover:brightness-110 transition-all">PLAY</button>
+</div>
+</div>
+</div>
+<!-- Map Card 2 -->
+<div class="glass-panel group rounded-2xl overflow-hidden hover:border-primary/50 transition-all flex flex-col">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-110" data-alt="Snowy mountain peaks with clouds" data-location="Himalayas" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBH_08XqaF10-hvhHHpmseteDxZ7ZHUQNVDGz8OaFdtJA1oSBO16j7ToSHg9vt1u29h-5g0zRC9wCpaXpwd-UVQ65mqbyClwZEJqpZiB-V15556sn4Lhbf-jan9qZvlMynlYldQMnrtj8DSGIBnrYTUnEhcq_TgXI0viL06C_LNFUu_hyN9TqcI2vZlbOgpg39AhpV3pATo8XnE089OEg0SejzSdueZ7KYT1th6Z4twtojsTwb73ZVJrgsoFlwPe-WsA9tt_ZZXhEa"/>
+<div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+<span class="text-xs font-bold text-primary uppercase">Easy</span>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<h3 class="text-lg font-bold text-white mb-1">Cloud Peak</h3>
+<p class="text-slate-400 text-sm mb-4">by SkyHigh</p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex items-center gap-1 text-slate-500 text-xs">
+<span class="material-symbols-outlined text-sm">download</span>
+<span>850</span>
+</div>
+<button class="bg-primary px-4 py-2 rounded-lg text-sm font-bold text-white hover:brightness-110 transition-all">PLAY</button>
+</div>
+</div>
+</div>
+<!-- Map Card 3 -->
+<div class="glass-panel group rounded-2xl overflow-hidden hover:border-primary/50 transition-all flex flex-col border-primary/20 bg-primary/5">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-110" data-alt="Deep dark blue underwater ocean scene" data-location="Mariana Trench" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnu36LhwOCKpVU6LKK2UtPrEDrDuNPQRBYhjoYZAO8ZTevbkvo5gh0t6geutT_qD0-frvRZqBaSP6tehQ4HTuWyjgLBKGl9LWn9l4HmOVcFebNOQfEk3fqrkFYowIg01QK8kyAypoSaxynoRcKExK5VomY-AJYioYsn1MZ1MgFiQ1mSReqyZqZK0YR8_XTu7IKxtNVWksGQOfVYm3Iu4zU9XiK5xypLjKTQFPeIO2RyXREjIMVZucHi4YD6H9fr8CwftKsCyg9SlVk"/>
+<div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+<span class="text-xs font-bold text-accent-orange uppercase">Insane</span>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<div class="flex items-center gap-2 mb-1">
+<h3 class="text-lg font-bold text-white">Abyssal Void</h3>
+<span class="material-symbols-outlined text-primary text-sm fill-1">verified</span>
+</div>
+<p class="text-slate-400 text-sm mb-4">by VoidRunner</p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex items-center gap-1 text-slate-500 text-xs">
+<span class="material-symbols-outlined text-sm">download</span>
+<span>4.5k</span>
+</div>
+<button class="bg-primary px-4 py-2 rounded-lg text-sm font-bold text-white hover:brightness-110 transition-all">PLAY</button>
+</div>
+</div>
+</div>
+<!-- Empty State (Hidden by default, shown when grid is empty) -->
+<!-- Use this structure if no maps are present -->
+<div class="hidden col-span-full flex flex-col items-center justify-center py-20 text-center glass-panel rounded-3xl border-dashed border-2 border-white/10">
+<div class="size-24 bg-primary/10 rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary text-5xl">map_search</span>
+</div>
+<h2 class="text-2xl font-bold text-white mb-2">No Global Maps Found</h2>
+<p class="text-slate-400 max-w-sm mb-8 leading-relaxed">It looks like there aren't any community maps matching your criteria yet. Be the first to create one!</p>
+<button class="bg-accent-orange text-background-dark font-black px-8 py-3 rounded-xl hover:scale-105 transition-transform">
+                        CREATE FIRST MAP
+                    </button>
+</div>
+<!-- Map Card 4 -->
+<div class="glass-panel group rounded-2xl overflow-hidden hover:border-primary/50 transition-all flex flex-col">
+<div class="relative aspect-video overflow-hidden">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-110" data-alt="Cracked earth with glowing red lava flows" data-location="Lava World" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyOkIDy58W4H7pxhrl01OwK2u-R0z8nJzetWdQvTbmXv2W27zz7dex8UbKaj5Ujjnfk1jcP9kjDwLxtA_NIfkqb9wg0tmF1HL8En5Q30VH_RHNYT4bwatjliYaKvlcpT8VMsBHVEK7bMdnDTba_1hSaie-sd8kqYvGR_ESvna4TW1PByo4ZAxFFA1b28W7JgjaLwf2qnH-57lhqkNUavv_W1Kz68mFFw8OsomOIZB01fFIswoQz0BmvVhHZmm05IRrPkrY-O_8Vaav"/>
+<div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+<span class="text-xs font-bold text-accent-orange uppercase">Hard</span>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<h3 class="text-lg font-bold text-white mb-1">Inferno Core</h3>
+<p class="text-slate-400 text-sm mb-4">by MagmaLord</p>
+<div class="mt-auto flex items-center justify-between">
+<div class="flex items-center gap-1 text-slate-500 text-xs">
+<span class="material-symbols-outlined text-sm">download</span>
+<span>3.1k</span>
+</div>
+<button class="bg-primary px-4 py-2 rounded-lg text-sm font-bold text-white hover:brightness-110 transition-all">PLAY</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Pagination/Info -->
+<footer class="mt-auto pt-6 flex items-center justify-between border-t border-white/10 text-slate-500 text-sm font-medium">
+<p>Showing 12 of 2,450 Maps</p>
+<div class="flex items-center gap-4">
+<button class="hover:text-white transition-colors">Previous</button>
+<div class="flex items-center gap-2">
+<span class="size-8 rounded-lg bg-primary text-white flex items-center justify-center">1</span>
+<span class="size-8 rounded-lg hover:bg-white/5 flex items-center justify-center cursor-pointer">2</span>
+<span class="size-8 rounded-lg hover:bg-white/5 flex items-center justify-center cursor-pointer">3</span>
+</div>
+<button class="hover:text-white transition-colors">Next</button>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

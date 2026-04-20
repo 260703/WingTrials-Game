@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { MainMenu } from "./components/MainMenu";
 import { Game } from "./components/Game";
 import { MapEditor } from "./components/MapEditor";
-import { MapSelector } from "./components/MapSelector";
+import { CustomMaps } from "./components/CustomMaps";
 import { Profile } from "./components/Profile";
 import Auth from "./components/Auth";
 import { Leaderboard } from "./components/Leaderboard";
@@ -24,6 +24,7 @@ function App() {
   const [selectedMap, setSelectedMap] = useState<MapData | null>(null);
   const [loading, setLoading] = useState(true);
   const [pendingScore, setPendingScore] = useState<number | null>(null);
+  const [editingMapData, setEditingMapData] = useState<Partial<MapData> | null>(null);
 
   // Ensure a profile exists for the current user (handles OAuth edge cases)
   const ensureProfileExists = async (userId: string, email: string, fullName?: string) => {
@@ -191,7 +192,10 @@ function App() {
             {gameState === "menu" && (
                 <MainMenu
                   onStart={startGame}
-                  onOpenEditor={() => setGameState("editor")}
+                  onOpenEditor={() => {
+                    setEditingMapData({ name: "My New Map", visibility: "local", difficulty: "medium" });
+                    setGameState("editor");
+                  }}
                   onOpenCustomMap={() => setGameState("custom-select")}
                   onOpenProfile={() => session ? setGameState("profile") : setGameState("auth")}
                   onOpenLeaderboard={() => setGameState("leaderboard")}
@@ -203,12 +207,23 @@ function App() {
                 />
             )}
 
-            {gameState === "editor" && <MapEditor onBack={handleBackToMenu} />}
+            {gameState === "editor" && (
+               <MapEditor 
+                 onBack={handleBackToMenu} 
+                 mapMetadata={editingMapData!} 
+                 userId={session?.user?.id}
+               />
+            )}
 
             {gameState === "custom-select" && (
-              <MapSelector
+              <CustomMaps
                 onSelect={startCustomGame}
                 onBack={handleBackToMenu}
+                onOpenEditor={(metadata) => {
+                  setEditingMapData(metadata || null);
+                  setGameState("editor");
+                }}
+                userId={session?.user?.id}
               />
             )}
 
@@ -239,7 +254,7 @@ function App() {
             {gameState === "playing" && (
               <Game 
                 onGameOver={handleGameOver} 
-                initialPipes={selectedMap?.pipes} 
+                initialPipes={selectedMap?.pipes_data} 
               />
             )}
 
@@ -261,11 +276,11 @@ function App() {
               <div className="bg-background-dark/80 backdrop-blur-xl border border-white/10 rounded-xl p-8 shadow-2xl flex flex-col items-center">
                 <div className="mb-4 bg-primary/20 p-4 rounded-full">
                   <span className="material-symbols-outlined text-primary text-5xl">
-                    {selectedMap && score === selectedMap.pipes.length ? "workspace_premium" : "emoji_events"}
+                    {selectedMap && score === selectedMap.pipes_data.length ? "workspace_premium" : "emoji_events"}
                   </span>
                 </div>
                 <h1 className="text-white tracking-tight text-4xl sm:text-5xl font-extrabold leading-tight text-center pb-8 italic">
-                  {selectedMap && score === selectedMap.pipes.length ? "LEVEL CLEAR" : "GAME OVER"}
+                  {selectedMap && score === selectedMap.pipes_data.length ? "LEVEL CLEAR" : "GAME OVER"}
                 </h1>
                 
                 <div className="grid grid-cols-2 gap-4 w-full mb-8">
@@ -281,7 +296,7 @@ function App() {
                   ) : (
                     <div className="flex flex-col items-center justify-center gap-1 rounded-xl p-6 bg-white/5 border border-white/10">
                       <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Map Pipes</p>
-                      <p className="text-white tracking-tight text-4xl font-extrabold">{selectedMap.pipes.length}</p>
+                      <p className="text-white tracking-tight text-4xl font-extrabold">{selectedMap.pipes_data.length}</p>
                     </div>
                   )}
                 </div>
@@ -322,11 +337,11 @@ function App() {
               <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-white/20 dark:border-slate-700/30 rounded-xl shadow-2xl p-8 flex flex-col items-center">
                 <div className="size-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-6 border-4 border-white dark:border-slate-700 shadow-inner">
                   <span className="material-symbols-outlined text-4xl text-slate-400 dark:text-slate-500">
-                    {selectedMap && score === selectedMap.pipes.length ? "emoji_events" : "sentiment_very_dissatisfied"}
+                    {selectedMap && score === selectedMap.pipes_data.length ? "emoji_events" : "sentiment_very_dissatisfied"}
                   </span>
                 </div>
                 <h1 className="text-slate-900 dark:text-slate-100 text-4xl sm:text-5xl font-black tracking-tighter mb-8 italic text-center">
-                  {selectedMap && score === selectedMap.pipes.length ? "LEVEL CLEAR" : "GAME OVER"}
+                  {selectedMap && score === selectedMap.pipes_data.length ? "LEVEL CLEAR" : "GAME OVER"}
                 </h1>
                 
                 <div className="grid grid-cols-2 gap-4 w-full mb-10">
@@ -342,7 +357,7 @@ function App() {
                   ) : (
                     <div className="bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5 flex flex-col items-center">
                       <p className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase mb-1">Map Pipes</p>
-                      <p className="text-slate-900 dark:text-slate-100 text-4xl font-extrabold">{selectedMap.pipes.length}</p>
+                      <p className="text-slate-900 dark:text-slate-100 text-4xl font-extrabold">{selectedMap.pipes_data.length}</p>
                     </div>
                   )}
                 </div>

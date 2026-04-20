@@ -1,20 +1,24 @@
 import React, { useState, useRef } from 'react';
 import type { MapData, PipeData } from '../types';
-import { saveMap } from '../utils/storage';
+import { supabase } from '../utils/supabaseClient';
 import backgroundImg from '../assets/background.jpg';
-
+import { MapEditorModal } from './MapEditorModal';
 
 interface MapEditorProps {
   onBack: () => void;
+  mapMetadata: Partial<MapData>;
+  userId: string | undefined;
 }
 
 const PIPE_WIDTH = 70;
 const PIPE_GAP = 150;
 const FLOOR_HEIGHT = 400;
 
-export const MapEditor: React.FC<MapEditorProps> = ({ onBack }) => {
-  const [pipes, setPipes] = useState<PipeData[]>([]);
-  const [mapName, setMapName] = useState('My Custom Map');
+export const MapEditor: React.FC<MapEditorProps> = ({ onBack, mapMetadata, userId }) => {
+  const [pipes, setPipes] = useState<PipeData[]>(mapMetadata.pipes_data || []);
+  const [metadata, setMetadata] = useState<Partial<MapData>>(mapMetadata);
+  const [isSaving, setIsSaving] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const handleAreaClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -59,42 +63,80 @@ export const MapEditor: React.FC<MapEditorProps> = ({ onBack }) => {
     }
   };
 
-  const handleSave = () => {
-    if (!mapName.trim()) {
-      alert('Please enter a map name');
+  const handleSave = async () => {
+    if (!userId) {
+      alert("You must be logged in to save a map.");
       return;
     }
-    const mapData: MapData = {
-      id: self.crypto.randomUUID(),
-      name: mapName,
-      pipes: pipes
-    };
-    saveMap(mapData);
-    alert('Map saved!');
-    onBack();
+    
+    setIsSaving(true);
+    try {
+      if (metadata.id) {
+        // Updating existing map
+        const { error } = await supabase.from('maps').update({
+          name: metadata.name,
+          visibility: metadata.visibility,
+          thumbnail_url: metadata.thumbnail_url,
+          difficulty: metadata.difficulty,
+          pipes_data: pipes,
+          updated_at: new Date().toISOString()
+        }).eq('id', metadata.id);
+        
+        if (error) throw error;
+      } else {
+        // Creating new map
+        const { error } = await supabase.from('maps').insert({
+          creator_id: userId,
+          name: metadata.name,
+          visibility: metadata.visibility,
+          thumbnail_url: metadata.thumbnail_url,
+          difficulty: metadata.difficulty,
+          pipes_data: pipes,
+        });
+
+        if (error) throw error;
+      }
+      
+      alert('Map saved successfully!');
+      onBack();
+    } catch (err) {
+      console.error("Failed to save map:", err);
+      alert("Failed to save map.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
     <div className="flex flex-col h-screen w-full bg-[#112116]">
        {/* Toolbar */}
-       <div className="bg-[#ded895] p-4 flex justify-between items-center border-b-4 border-black z-20">
+        <div className="bg-[#ded895] p-4 flex justify-between items-center border-b-4 border-black z-20">
           <div className="flex gap-4 items-center">
             <button onClick={onBack} className="px-4 py-2 bg-slate-500 text-white font-bold border-2 border-black">
               BACK
             </button>
-            <input 
-              type="text" 
-              value={mapName}
-              onChange={(e) => setMapName(e.target.value)}
-              className="px-4 py-2 border-2 border-black font-game text-xl"
-              placeholder="Map Name"
-            />
+            <div className="flex items-center gap-2 group">
+              <div className="px-4 py-2 font-game text-xl text-black">
+                Editing: {metadata.name}
+              </div>
+              <button 
+                onClick={() => setShowSettings(true)}
+                className="size-10 flex items-center justify-center bg-black/10 rounded-full hover:bg-black/20 text-black transition-colors"
+                title="Map Settings"
+              >
+                <span className="material-symbols-outlined">settings</span>
+              </button>
+            </div>
           </div>
           <div className="text-black font-game">
             Right Scroll to Expand Map | Click to Place/Remove Pipe
           </div>
-          <button onClick={handleSave} className="px-6 py-2 bg-[#54ac42] text-white font-bold border-2 border-black hover:scale-105">
-            SAVE MAP
+          <button 
+            onClick={handleSave} 
+            disabled={isSaving}
+            className="px-6 py-2 bg-[#54ac42] text-white font-bold border-2 border-black hover:scale-105 disabled:opacity-50"
+          >
+            {isSaving ? 'SAVING...' : 'SAVE MAP'}
           </button>
        </div>
 
@@ -153,6 +195,17 @@ export const MapEditor: React.FC<MapEditorProps> = ({ onBack }) => {
             </div>
          </div>
        </div>
+
+       {showSettings && (
+         <MapEditorModal 
+           existingMap={metadata as MapData}
+           onClose={() => setShowSettings(false)}
+           onProceedToCanvas={(data) => {
+             setMetadata(prev => ({ ...prev, ...data }));
+             setShowSettings(false);
+           }}
+         />
+       )}
     </div>
   );
 };

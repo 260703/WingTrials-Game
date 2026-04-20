@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#259df4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0a0f14",
+                        "accent-green": "#22c55e",
+                        "accent-orange": "#f97316",
+                        "surface-dark": "#16222c",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>body {
+    font-family: "Plus Jakarta Sans", sans-serif
+    }
+.glass-panel {
+    background: rgba(22, 34, 44, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1)
+    }
+.bg-game-blur {
+    background-image: linear-gradient(rgba(10, 15, 20, 0.8), rgba(10, 15, 20, 0.8)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuCCvNtJ6cC_hDCefyYTqEALmee_zzxcg4p8cgLbvwZjOhCakFCAFmP8t5y_8W6jmTr-p70g7peKz3a_6P7TzvOveawCWprEnbd3-2ucMpDIgA8GCML63jzvM1AS3vi0Vf2xm8mnbhyfP-3vm5C8mAKitE43o5rXCJZcrgSwfFzt5p6Wrfd2T0GMWWIxOko8bSrDlFc4PHkT7DTC9s0zNgJhXUW_3DTjzg-AP5MkJJy4KW1AEgJ5N9Dch2W13GnH01UsnOwKvkxekZ5U);
+    background-size: cover;
+    background-position: center
+    }</style>
+</head>
+<body class="bg-background-dark text-slate-100 min-h-screen font-display antialiased">
+<!-- Background Layer -->
+<div class="fixed inset-0 bg-game-blur -z-10" data-alt="Blurred retro gaming background with vibrant colors"></div>
+<div class="relative flex min-h-screen w-full flex-col items-center justify-center p-4 md:p-8">
+<!-- Main Container -->
+<div class="layout-content-container flex flex-col w-full max-w-[640px] glass-panel rounded-xl overflow-hidden shadow-2xl">
+<!-- Header -->
+<header class="flex items-center justify-between border-b border-white/10 px-8 py-6">
+<div class="flex items-center gap-4">
+<div class="text-primary">
+<span class="material-symbols-outlined text-4xl">map</span>
+</div>
+<div>
+<h2 class="text-white text-2xl font-bold leading-tight tracking-tight">Remastered Map Editor</h2>
+<p class="text-slate-400 text-sm font-medium">Create your next masterpiece</p>
+</div>
+</div>
+<button class="flex size-10 items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-slate-300 transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</header>
+<!-- Form Content -->
+<div class="p-8 space-y-8">
+<!-- Map Name Input -->
+<div class="flex flex-col gap-3">
+<label class="text-slate-200 text-base font-semibold leading-normal flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">edit</span>
+                        Map Name
+                    </label>
+<input class="w-full rounded-xl border border-white/10 bg-white/5 px-5 py-4 text-white placeholder:text-slate-500 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="e.g. Neon Horizon, Gravity Well..." type="text"/>
+</div>
+<!-- Map Visibility Toggle -->
+<div class="flex flex-col gap-3">
+<label class="text-slate-200 text-base font-semibold leading-normal flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">public</span>
+                        Map Visibility
+                    </label>
+<div class="flex w-full h-14 items-center justify-center rounded-xl bg-white/5 p-1.5 border border-white/5">
+<label class="flex cursor-pointer h-full grow items-center justify-center rounded-lg px-4 transition-all has-[:checked]:bg-primary has-[:checked]:text-white text-slate-400 font-bold text-sm">
+<span class="truncate">Local Map</span>
+<input checked="" class="hidden" name="visibility" type="radio" value="local"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center rounded-lg px-4 transition-all has-[:checked]:bg-primary has-[:checked]:text-white text-slate-400 font-bold text-sm">
+<span class="truncate">Global Map</span>
+<input class="hidden" name="visibility" type="radio" value="global"/>
+</label>
+</div>
+</div><!-- Map Thumbnail Upload -->
+<div class="flex flex-col gap-3">
+<label class="text-slate-200 text-base font-semibold leading-normal flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">image</span>
+        Map Thumbnail
+    </label>
+<div class="group relative flex flex-col items-center justify-center w-full h-32 rounded-xl border-2 border-dashed border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50 transition-all cursor-pointer overflow-hidden">
+<div class="flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-3xl text-slate-400 group-hover:text-primary transition-colors">cloud_upload</span>
+<div class="flex flex-col items-center">
+<span class="text-sm font-bold text-slate-300">Upload Map Image</span>
+<span class="text-xs text-slate-500">PNG, JPG up to 5MB</span>
+</div>
+</div>
+<input accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" type="file"/>
+</div>
+</div>
+<!-- Difficulty Dropdown -->
+<div class="flex flex-col gap-3">
+<label class="text-slate-200 text-base font-semibold leading-normal flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">bolt</span>
+                        Difficulty Level
+                    </label>
+<div class="relative group">
+<select class="appearance-none w-full rounded-xl border border-white/10 bg-white/5 px-5 py-4 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none cursor-pointer transition-all">
+<option class="bg-surface-dark" value="easy">Easy - Chill &amp; Fly</option>
+<option class="bg-surface-dark" selected="" value="medium">Medium - Balanced Challenge</option>
+<option class="bg-surface-dark" value="hard">Hard - Quick Reflexes</option>
+<option class="bg-surface-dark" value="insane">Insane - Pixel Perfect</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-slate-400">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-4 pt-4">
+<button class="w-full flex h-16 items-center justify-center rounded-xl bg-gradient-to-r from-accent-green to-emerald-600 text-white gap-3 text-lg font-extrabold shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined">play_arrow</span>
+                        START BUILDING
+                    </button>
+<button class="w-full flex h-14 items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 gap-2 text-base font-bold border border-white/5 transition-all">
+                        CANCEL
+                    </button>
+</div>
+</div>
+<!-- Footer Meta -->
+<div class="px-8 py-4 bg-white/5 flex justify-between items-center">
+<div class="flex items-center gap-2 text-slate-500 text-xs">
+<span class="material-symbols-outlined text-sm">info</span>
+<span>Saving to local profile</span>
+</div>
+<div class="text-primary text-xs font-bold uppercase tracking-widest">
+                    V2.0 Remastered
+                </div>
+</div>
+</div>
+<!-- Decorative Elements -->
+<div class="absolute bottom-10 left-10 opacity-20 hidden lg:block">
+<span class="material-symbols-outlined text-9xl text-white">grid_view</span>
+</div>
+<div class="absolute top-10 right-10 opacity-20 hidden lg:block rotate-45">
+<span class="material-symbols-outlined text-9xl text-primary">navigation</span>
+</div>
+</div>
+</body></html>

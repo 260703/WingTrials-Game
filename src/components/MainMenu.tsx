@@ -1,5 +1,6 @@
 import { type FC } from 'react';
-import birdImg from '../assets/bird.jpg';
+import { Footer } from './Footer';
+import { AnimatedTitle } from './AnimatedTitle';
 
 interface MainMenuProps {
   onStart: () => void;
@@ -36,9 +37,9 @@ export const MainMenu: FC<MainMenuProps> = ({
   };
 
   return (
-    <div className="relative h-screen w-full flex flex-col items-center justify-between overflow-hidden pixel-bg font-display">
+    <div className="relative min-h-screen w-full flex flex-col items-center justify-between overflow-x-hidden overflow-y-auto pixel-bg font-display">
       {/* ── Background Elements (CSS-only parallax) ── */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="fixed inset-0 pointer-events-none z-0">
         {/* Sun */}
         <div className="absolute top-20 right-20 w-32 h-32 bg-yellow-300 rounded-full blur-xl opacity-60" />
 
@@ -125,24 +126,10 @@ export const MainMenu: FC<MainMenuProps> = ({
       </header>
 
       {/* ── Center Content ── */}
-      <main className="relative z-10 flex flex-col items-center gap-6 sm:gap-8 mb-4 sm:mb-8">
+      <main className="relative z-10 flex flex-col items-center gap-6 sm:gap-8 mb-12 sm:mb-16">
         {/* Logo Section */}
         <div className="flex flex-col items-center gap-2 sm:gap-4">
-          <div className="relative">
-            <h1 className="text-white text-6xl md:text-8xl lg:text-9xl font-extrabold logo-3d tracking-tighter italic">
-              FLAPPY<br />BIRD
-            </h1>
-
-            {/* Bird icon — stationary, positioned above right end of "FLAPPY" */}
-            <div className="absolute -top-10 right-[10%] w-14 h-14 flex items-center justify-center">
-              <img
-                alt="Flappy Bird"
-                className="w-full h-full object-contain drop-shadow-lg pixelated rounded-full"
-                style={{ mixBlendMode: 'multiply' }}
-                src={birdImg}
-              />
-            </div>
-          </div>
+          <AnimatedTitle />
 
           {/* High Score Card */}
           <div className="glass-card px-8 py-3 rounded-full flex items-center gap-4 mt-2 md:mt-4">
@@ -196,9 +183,10 @@ export const MainMenu: FC<MainMenuProps> = ({
           {isLoggedIn && (
             <button
               onClick={onOpenProfile}
-              className="group relative flex items-center justify-center overflow-hidden rounded-full h-12 bg-white/10 hover:bg-white/20 transition-all glass-card"
+              className="group relative flex items-center justify-center overflow-hidden rounded-full h-14 bg-indigo-500 hover:scale-105 transition-transform duration-200 shadow-[0_6px_0_0_#4338ca] active:translate-y-1 active:shadow-none"
             >
-              <span className="relative flex items-center gap-3 text-white text-base font-bold tracking-wider uppercase">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              <span className="relative flex items-center gap-3 text-white text-lg font-bold tracking-wider uppercase">
                 <span className="material-symbols-outlined text-xl">person</span>
                 Profile
               </span>
@@ -207,8 +195,10 @@ export const MainMenu: FC<MainMenuProps> = ({
         </div>
       </main>
 
-      {/* Spacer for footer area (ground is visual) */}
-      <div />
+      {/* Footer Area */}
+      <div className="relative z-10 w-full mt-auto pb-4 sm:pb-6">
+        <Footer />
+      </div>
     </div>
   );
 };
